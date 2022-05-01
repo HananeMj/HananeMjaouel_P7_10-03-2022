@@ -2,7 +2,7 @@ const client = require("../config/db");
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
 
-exports.getAllposts = (req, res) => {
+/*exports.getAllposts = (req, res) => {
   let insertQuery = `SELECT * FROM posts`;
   client.query(insertQuery, (err, results) => {
     if (!err) {
@@ -12,10 +12,10 @@ exports.getAllposts = (req, res) => {
       res.status(400).json({ error: err.message });
     }
   });
-};
+};*/
 
 exports.getOnePost = (req, res) => {
-  let insertQuery = `SELECT * FROM posts WHERE id=${req.params.id}`;
+  let insertQuery = `SELECT * FROM posts WHERE idpost=${req.params.idpost}`;
   client.query(insertQuery, (err, results) => {
     if (!err) {
       res.send(results.rows);
@@ -51,15 +51,22 @@ exports.createPost = (req, res) => {
     userId: userId,
     createdAt: date.toISOString(),
   };
-  let insertQuery = `INSERT INTO posts (content, picture, userId, createdat) VALUES ('${post.content}', '${post.picture}', '${post.userId}', '${post.createdAt}')`;
-  client.query(insertQuery, (err, results) => {
-    if (!err) {
-      res.status(200).json({ message: "Post publié" });
-    } else {
-      console.log(err);
-      res.status(400).json({ error: err.message });
-    }
-  });
+  if (post.content != "") {
+    let insertQuery = `INSERT INTO posts (content, picture, userId, createdat) VALUES ('${post.content}', '${post.picture}', '${post.userId}', '${post.createdAt}')`;
+    client.query(insertQuery, (err, results) => {
+      if (!err) {
+        console.log(results);
+        res.status(200).json({ message: "Post publié" });
+      } else {
+        console.log(err);
+        res.status(400).json({ error: err.message });
+      }
+    });
+  } else {
+    res
+      .status(400)
+      .json({ message: "vous ne pouvez pas publier de post sans contenu" });
+  }
 };
 
 exports.deletePost = (req, res) => {
@@ -79,7 +86,7 @@ exports.deletePost = (req, res) => {
     createdAt: date.toISOString(),
   };
   if (post && post.userId == userId) {
-    let insertQuery = `delete from posts where id=${req.params.id}`;
+    let insertQuery = `delete from posts where idpost=${req.params.idpost}`;
     client.query(insertQuery, (err, results) => {
       if (!err) {
         console.log(results);
@@ -102,7 +109,7 @@ exports.modifyPost = (req, res) => {
     //createdAt: date.toISOString(),
   };
   if (post.userId == userId) {
-    let updateQuery = `UPDATE posts SET content = '${post.content}', picture= '${post.picture}' WHERE id =${req.params.id} `;
+    let updateQuery = `UPDATE posts SET content = '${post.content}', picture= '${post.picture}' WHERE idpost =${req.params.idpost} `;
     client.query(updateQuery, (err, results) => {
       if (!err) {
         console.log(results);
@@ -113,3 +120,29 @@ exports.modifyPost = (req, res) => {
     });
   }
 };
+
+exports.listAllPosts = (req, res) => {
+  let insertQuery = `SELECT * FROM posts LEFT JOIN users ON POSTS.userid = USERS.iduser ORDER BY createdat DESC`;
+  client.query(insertQuery, (err, results) => {
+    if (!err) {
+      console.log(results);
+      res.send(results.rows);
+    } else {
+      res.status(400).json({ error: err.message });
+      console.log(err);
+    }
+  });
+};
+
+/*exports.getAllPostCom = (req, res) => {
+  let insertQuery = `SELECT * FROM posts JOIN comments ON POSTS.id = COMMENTS.postid JOIN users ON USERS.id = COMMENTS.userid`;
+  client.query(insertQuery, (err, results) => {
+    if (!err) {
+      console.log(results);
+      res.send(results.rows);
+    } else {
+      console.log(err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+};*/

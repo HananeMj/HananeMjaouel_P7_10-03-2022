@@ -2,7 +2,7 @@
   <div class="container bootstrap snippets bootdey">
     <div class="row">
       <div class="col-sm-6 col-md-4 col-md-offset-4">
-        <h1 class="text-center login-title">Se connecter</h1>
+        <h1 class="text-center login-title">Connexion</h1>
         <div class="account-wall">
           <img
             class="profile-img"
@@ -14,7 +14,7 @@
               v-model="email"
               type="text"
               class="form-control"
-              placeholder="Email"
+              placeholder="Email :"
               required
               autofocus
             />
@@ -22,7 +22,7 @@
               v-model="password"
               type="password"
               class="form-control"
-              placeholder="Mot de passe"
+              placeholder="Mot de passe :"
               required
             />
             <button class="btn btn-lg btn-primary btn-block">Connexion</button>
@@ -44,7 +44,9 @@
 <script>
 import axios from "axios";
 export default {
-  name: "LoginView",
+  name: "login-view",
+  components: {},
+
   data() {
     return {
       email: "",
@@ -67,8 +69,12 @@ export default {
             localStorage.setItem("token", resToken);
             localStorage.setItem("user", JSON.stringify(resUser));
             this.$router.push("/feed");
+            //this.email: "",
+            //this.password:"",
           })
+
           .catch((err) => {
+            alert("Echec de connexion");
             console.log(err);
           });
       }
@@ -145,5 +151,11 @@ body {
 .new-account {
   display: block;
   margin-top: 10px;
+}
+.col-md-4 {
+  margin-top: 50px;
+}
+.row {
+  justify-content: center;
 }
 </style>

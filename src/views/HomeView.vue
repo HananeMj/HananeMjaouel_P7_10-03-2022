@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/images/logo.png" />
     <HelloWorld msg="Bienvenue sur votre réseau social Groupomania" />
   </div>
 </template>

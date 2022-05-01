@@ -1,11 +1,12 @@
 const client = require("../config/db");
+const jwt = require("jsonwebtoken");
 
-exports.authAdmin = (req, res) => {
+exports.isAdmin = (req, res) => {
   const token = req.headers.authorization.split(" ")[1];
   const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
   const userId = decodedToken.userId;
-  const adminId = userId;
-  let insertQuery = `SELECT isadmin FROM users WHERE id='${adminId}'`;
+
+  let insertQuery = `SELECT isadmin FROM users WHERE id='${userId}'`;
   client.query(insertQuery, (err, results, next) => {
     if (err) {
       res.status(500).json({ error: err.message });
@@ -26,8 +27,9 @@ exports.authPost = (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
   const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
   const userId = decodedToken.userId;
-  const adminId = userId;
-  let insertQuery = `SELECT isadmin FROM users WHERE id='${adminId}'`;
+
+  let insertQuery = `SELECT isadmin FROM users WHERE id='${userId}'`;
+
   client.query(insertQuery, (err, results, next) => {
     if (err) {
       res.status(500).json({ error: err.message });
@@ -43,8 +45,8 @@ exports.authPost = (req, res, next) => {
           } else if (results.length === 0) {
             res.status(404).json({ message: "Post inexistant" });
           } else {
-            const postAdmin = results[0].userid;
-            if (postAdmin === userId) {
+            const postUser = results[0].userid;
+            if (postUser === userId) {
               next();
             } else {
               res.status(403).json({

@@ -21,8 +21,8 @@ exports.likePost = (req, res) => {
       console.log(resLength);
       if (resLength === 0) {
         const like = {
-          postId: postId,
-          userId: userId,
+          postid: postId,
+          userid: userId,
         };
         console.log(like);
         let insertQuery = `INSERT INTO likes (postid, userid) VALUES ('${postId}', '${userId}')`;
@@ -54,16 +54,67 @@ exports.likePost = (req, res) => {
   }
 };
 
-exports.getLikes = (req, res) => {
+/*exports.likePost = (req, res) => {
+  const token = req.headers.authorization.split(" ")[1];
+  const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
+  const userId = decodedToken.userId;
   const postId = req.params.postid;
-  let insertQuery = `SELECT userid FROM likes WHERE postid='${postId}'`;
-  client.query(insertQuery, (err, results) => {
-    if (!err) {
-      console.log(results);
-      res.status(200).json({ likes: results });
-    } else {
-      console.log(err);
-      res.status(400).json({ error: err.message });
-    }
-  });
+  let insertQuery = `SELECT * FROM likes WHERE postid='${postId}' AND userid='${userId}'`;
+  client
+    .query(insertQuery, (err, results) => {
+      if (!err) {
+        console.log(results);
+        return;
+      } else {
+        console.log(err);
+        res.status(400).json({ error: err.message });
+      }
+    })
+    .then((response) => {
+      //const resultsLength = results.length;
+      //console.log(resultsLength);
+      if (response.length === 0) {
+        const like = {
+          idlike: req.body.idlike,
+          postid: postId,
+          userid: userId,
+        };
+        console.log(like);
+        let insertQuery = `INSERT INTO likes (idlike, postid, userid) VALUES ('${like.postid}', '${like.userid}')`;
+        client.query(insertQuery, (err, results) => {
+          if (!err) {
+            console.log(results);
+            res.send("Like ajouté !");
+          } else {
+            res.status(400).json({ error: err.message });
+          }
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(400).json({ error: "Echec d'ajout du like" });
+    });
+};*/
+
+exports.getLikes = (req, res) => {
+  const token = req.headers.authorization.split(" ")[1];
+  const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
+  const userId = decodedToken.userId;
+  const like = {
+    idlike: req.body.idlike,
+    postid: req.params.postid,
+    userid: userId,
+  };
+  if (like && like.userid == userId) {
+    let insertQuery = `SELECT * FROM likes WHERE postid='${like.postid}'`;
+    client.query(insertQuery, (err, results) => {
+      if (!err) {
+        console.log(results);
+        res.status(200).json({ likes: results });
+      } else {
+        console.log(err);
+        res.status(400).json({ error: err.message });
+      }
+    });
+  }
 };

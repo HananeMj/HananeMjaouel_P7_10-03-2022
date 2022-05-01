@@ -3,6 +3,8 @@ import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import RegisterView from "../views/RegisterView.vue";
 import FeedView from "../views/FeedView.vue";
+import ProfilUser from "../views/ProfilUser.vue";
+import AllUsers from "../views/AllUsers.vue";
 
 const routes = [
   {
@@ -24,6 +26,16 @@ const routes = [
     path: "/feed",
     name: "FeedView",
     component: FeedView,
+  },
+  {
+    path: "/profil",
+    name: "ProfilUser",
+    component: ProfilUser,
+  },
+  {
+    path: "/members",
+    name: "AllUsers",
+    component: AllUsers,
   },
 ];
 const router = createRouter({

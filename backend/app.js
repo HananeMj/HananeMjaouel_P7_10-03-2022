@@ -40,7 +40,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api/user", userRoute);
 app.use("/api/post", postRoute);
-app.use("/api/comment", commentRoute);
-app.use("/api/like", likeRoute);
+app.use("/api/post", commentRoute);
+app.use("/api/post", likeRoute);
 
 module.exports = app;

@@ -15,9 +15,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-h3 {
+h1 {
   margin: 40px 0 0;
+  text-align: center;
+  margin-top: 50px;
 }
+
 ul {
   list-style-type: none;
   padding: 0;

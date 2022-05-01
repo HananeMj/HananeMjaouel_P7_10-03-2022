@@ -20,15 +20,15 @@ exports.getOneUser = (req, res) => {
   const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
   const userId = decodedToken.userId;
   const user = {
-    id: req.params.id,
+    iduser: req.params.iduser,
     username: req.body.username,
     email: req.body.email,
     password: req.body.password,
     isAdmin: req.body.isadmin,
   };
-  if (user && user.id == userId) {
+  if (user && user.iduser == userId) {
     client.query(
-      `Select * from users where id=${req.params.id}`,
+      `Select * from users where iduser=${req.params.iduser}`,
       (err, result) => {
         if (!err) {
           res.send(result.rows);
@@ -83,7 +83,7 @@ exports.login = (req, res) => {
   const emailEncrypted = cryptoJs
     .HmacSHA256(req.body.email, `${process.env.SECRET_KEY}`)
     .toString();
-  let insertQuery = `SELECT id, username, email, password, isAdmin FROM users WHERE email='${emailEncrypted}'`;
+  let insertQuery = `SELECT iduser, username, email, password, isAdmin, avatar FROM users WHERE email='${emailEncrypted}'`;
   client.query(insertQuery, (err, results) => {
     if (err) {
       res.status(400).json({ message: "Connexion echouée !" });
@@ -93,11 +93,12 @@ exports.login = (req, res) => {
         if (!valid) {
           return res.status(400).json({ error: "Mot de passe incorrect !" });
         } else {
+          console.log("connecté");
           res.status(200).json({
             message: "Connecté !",
-            userId: user.id,
+            userId: user.iduser,
             token: jwt.sign(
-              { userId: user.id },
+              { userId: user.iduser },
               `${process.env.SECRET_TOKEN}`,
               { expiresIn: "24h" }
             ),
@@ -113,14 +114,15 @@ exports.deleteUser = (req, res) => {
   const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
   const userId = decodedToken.userId;
   const user = {
-    id: req.params.id,
+    iduser: req.params.iduser,
     username: req.body.username,
     email: req.body.email,
     password: req.body.password,
     isAdmin: req.body.isadmin,
+    avatar: req.body.avatar,
   };
-  if (user && user.id == userId) {
-    let insertQuery = `DELETE FROM users where id=${user.id}`;
+  if (user && user.iduser == userId) {
+    let insertQuery = `DELETE FROM USERS  WHERE iduser=${user.iduser}`;
 
     client.query(insertQuery, (err, results) => {
       if (!err) {
@@ -137,7 +139,7 @@ exports.deleteUser = (req, res) => {
   }
 };
 
-exports.updateUser = (req, res) => {
+/*exports.updateUser = (req, res) => {
   const token = req.headers.authorization.split(" ")[1];
   const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
   const userId = decodedToken.userId;
@@ -149,13 +151,15 @@ exports.updateUser = (req, res) => {
       .toString(),
     password: req.body.password,
     isAdmin: req.body.isadmin,
+    avatar: req.body.avatar,
   };
   if (user && user.id == userId) {
     let updateQuery = `UPDATE users
                        SET username = '${user.username}',
                        email = '${user.email}',
                        password = '${user.password}',
-                       isadmin = '${user.isAdmin}'
+                       isadmin = '${user.isAdmin}',
+                       avatar = '${user.avatar}
       
                        WHERE id = ${user.id}`;
 
@@ -173,4 +177,53 @@ exports.updateUser = (req, res) => {
         "Vous n'avez pas les droits pour modifier les données de cet utilisateur !",
     });
   }
+};*/
+
+exports.uploadAvatar = (req, res) => {
+  const token = req.headers.authorization.split(" ")[1];
+  const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
+  const userId = decodedToken.userId;
+
+  let selectQuery = `SELECT * FROM users WHERE iduser='${userId}'`;
+
+  client.query(selectQuery, (err, results) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({ error: err.message });
+    } else {
+      let user = results.rows.at(0);
+      //console.log(user.avatar);
+
+      if (user.avatar != null && user.avatar.trim() !== "") {
+        console.log("profil picture:", user.avatar);
+        const file = user.avatar.split("/images/")[1];
+        fs.unlink(`images/${file}`, (err) => {
+          if (err) {
+            console.log(err, "Echec de suppression de la photo");
+          } else {
+            console.log("Photo supprimée");
+          }
+        });
+      }
+
+      if (req.file) {
+        let avatar = `${req.protocol}://${req.get("host")}/images/${
+          req.file.filename
+        }`;
+
+        console.log(req.file.filename);
+        console.log(avatar);
+        let queryUpdate = `UPDATE users SET avatar='${avatar}' WHERE iduser='${userId}'`;
+        client.query(queryUpdate, (err, results) => {
+          if (!err) {
+            console.log(results, "Avatar modifié !");
+            res.status(200).json({ message: "Avatar modifié" });
+          } else {
+            console.log(err, "Echec de modification de l'avatar !");
+            res.status(500).json({ error: err.message });
+          }
+        });
+      }
+    }
+  });
 };
