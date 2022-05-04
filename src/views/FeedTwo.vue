@@ -1,36 +1,37 @@
 <template>
   <div class="home">
-    <div class="input">
-      <PostInput @newPost="getNewPost" />
-    </div>
+    <PostInput @newPost="getNewPost" />
     <h3>Fil d'actualités</h3>
     <div v-for="post in posts" :key="post.idpost" class="wrapper">
-      <SocialPost :post="post" />
+      <PostTwo :post="post" />
     </div>
   </div>
 </template>
 
 <script>
-import SocialPost from "@/components/SocialPost.vue";
+import PostTwo from "@/components/PostTwo.vue";
 import PostInput from "@/components/PostInput.vue";
 import axios from "axios";
 export default {
-  name: "FeedView",
-
+  name: "FeedTwo",
   components: {
-    SocialPost,
+    PostTwo,
     PostInput,
   },
-
   data() {
     return {
       user: {},
-      post: {},
+      comments: [],
       idpost: null,
-      posts: [],
+      posts: [
+        {
+          idpost: "",
+          content: "",
+          picture: "",
+          createdat: "",
+        },
+      ],
       likes: [],
-
-      content: "",
     };
   },
   methods: {
@@ -56,18 +57,4 @@ export default {
 };
 </script>
 
-<style scoped>
-body {
-  margin-top: 20px;
-  background: #eee;
-}
-h3 {
-  text-align: center;
-  margin-top: 50px;
-  margin-bottom: 50px;
-  font-weight: bold;
-}
-.input {
-  margin-top: 50px;
-}
-</style>
+<style></style>

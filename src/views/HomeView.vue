@@ -1,6 +1,9 @@
 <template>
   <div class="home">
-    <HelloWorld msg="Bienvenue sur votre réseau social Groupomania" />
+    <HelloWorld msg="Bienvenue sur votre réseau social" />
+  </div>
+  <div class="imgAccueil">
+    <img src="../assets/images/icon.png" alt="backround image" />
   </div>
 </template>
 
@@ -15,3 +18,11 @@ export default {
   },
 };
 </script>
+<style scoped>
+.imgAccueil {
+  text-align: center;
+}
+img {
+  height: 500px;
+}
+</style>

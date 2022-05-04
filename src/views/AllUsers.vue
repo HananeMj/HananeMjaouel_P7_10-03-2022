@@ -10,7 +10,7 @@
       <div class="col-md-3">
         <div v-if="user.avatar" class="d-flex justify-content-center">
           <img
-            src="user.avatar"
+            :src="user.avatar"
             alt="photo de profil"
             width="50"
             class="rounded-circle"
@@ -29,7 +29,7 @@
           <p class="user_info"></p>
         </div>
         <div class="span2">
-          <div class="btn-group">
+          <div v-if="user.isadmin == true" class="btn-group">
             <a
               class="btn dropdown-toggle btn-info"
               data-toggle="dropdown"
@@ -41,12 +41,10 @@
             </a>
             <ul class="dropdown-menu">
               <li>
-                <a href="#"><span class="icon-wrench"></span> Modifier</a>
+                <a href="#">Modifier</a>
               </li>
               <li>
-                <a href="#" @click="deleteUser(user)"
-                  ><i class="fa-solid fa-trash-can"></i>Supprimer</a
-                >
+                <a href="#" @click="deleteUser(user)">Supprimer</a>
               </li>
             </ul>
           </div>
@@ -65,6 +63,7 @@ export default {
     return {
       user: {},
       users: [],
+      isadmin: "",
     };
   },
   methods: {
@@ -102,6 +101,7 @@ export default {
 h3 {
   text-align: center;
   margin-top: 50px;
+  font-weight: bold;
 }
 .user {
   max-width: 100%;

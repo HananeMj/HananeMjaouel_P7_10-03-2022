@@ -40,14 +40,13 @@
                       class="form-control form-control-lg"
                       type="password"
                       name="password"
-                      placeholder="Entre votre mot de passe"
+                      placeholder="Entrez votre mot de passe"
                     />
                   </div>
                   <div class="text-center mt-3">
-                    <router-link to="/feed" class="btn btn-lg btn-primary"
-                      >créer mon compte !</router-link
-                    >
-                    <!-- <button type="submit" class="btn btn-lg btn-primary">Sign up</button> -->
+                    <button type="submit" class="btn btn-lg btn-primary">
+                      créer mon compte
+                    </button>
                   </div>
                 </form>
               </div>

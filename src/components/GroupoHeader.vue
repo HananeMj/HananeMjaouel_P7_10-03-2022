@@ -18,21 +18,30 @@
       <ul class="navbar-nav">
         <li class="nav-item active">
           <router-link to="/feed" class="nav-link"
-            >Accueil <span class="sr-only">(current)</span></router-link
+            >Fil d'actualités<span class="sr-only">(current)</span></router-link
           >
         </li>
         <li class="nav-item">
-          <router-link to="/login" class="nav-link">Se connecter</router-link>
+          <router-link to="/login" class="nav-link"
+            >Connexion
+            <Icon icon="oi:account-login" style="color: red" height="20"
+          /></router-link>
         </li>
         <li class="nav-item">
           <router-link to="/profil" class="nav-link" href="#"
-            >Profil</router-link
-          >
+            >Profil
+            <Icon
+              icon="carbon:user-avatar-filled"
+              style="color: red"
+              height="20"
+            />
+          </router-link>
         </li>
         <li class="nav-item">
-          <a v-if="isVisible" @click="logOutUser" class="nav-link"
-            >Se déconnecter</a
-          >
+          <a @click="logOutUser" class="nav-link"
+            >Déconnexion
+            <Icon icon="oi:account-logout" style="color: red" height="20"
+          /></a>
         </li>
       </ul>
     </div>
@@ -40,15 +49,14 @@
 </template>
 
 <script>
+import { Icon } from "@iconify/vue";
 export default {
   name: "groupo-header",
   data() {
-    return {
-      isVisible: true,
-    };
+    return {};
   },
 
-  components: {},
+  components: { Icon },
   methods: {
     logOutUser() {
       localStorage.clear();
@@ -59,6 +67,9 @@ export default {
 </script>
 
 <style scoped>
+.navbar {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+}
 img.logo {
   height: 60 px;
   width: 30%;

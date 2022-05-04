@@ -76,6 +76,7 @@ export default {
         .then((response) => {
           this.$emit("newPost", response.data.post);
           console.log("post crée !" + response);
+          document.location.reload();
         })
         .catch((error) => {
           console.log(error);

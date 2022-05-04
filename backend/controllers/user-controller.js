@@ -25,10 +25,11 @@ exports.getOneUser = (req, res) => {
     email: req.body.email,
     password: req.body.password,
     isAdmin: req.body.isadmin,
+    avatar: req.body.avatar,
   };
   if (user && user.iduser == userId) {
     client.query(
-      `Select * from users where iduser=${req.params.iduser}`,
+      `Select * from users where iduser=${user.iduser}`,
       (err, result) => {
         if (!err) {
           res.send(result.rows);
@@ -51,24 +52,34 @@ exports.signup = (req, res) => {
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => {
-      const user = req.body;
+      const user = {
+        username: req.body.username,
+        email: cryptoJs
+          .HmacSHA256(req.body.email, process.env.SECRET_KEY)
+          .toString(),
+        password: hash,
+        //isadmin: req.body.isadmin,
+      };
+      /*const user = req.body;
       user.password = hash;
       user.email = cryptoJs
         .HmacSHA256(req.body.email, process.env.SECRET_KEY)
-        .toString();
+        .toString();*/
       let insertEmailQuery = `SELECT * FROM users WHERE email='${user.email}'`;
       client.query(insertEmailQuery, (err, results) => {
         if (results.length > 0) {
           res.status(400).json({ message: " Email déjà enregistrée !" });
         } else {
-          let insertQuery = `INSERT INTO users (username, email, password, isAdmin) VALUES ('${user.username}', '${user.email}', '${user.password}', '${user.isAdmin}')`;
+          let insertQuery = `INSERT INTO users (username, email, password) VALUES ('${user.username}', '${user.email}', '${user.password}')`;
           client.query(insertQuery, (err, results) => {
             if (!err) {
               console.log(results);
               res.send("Nouvel utilisateur créé !");
             } else {
               console.log(err.message);
-              res.status(400).json({ error: "Echec de création utilisateur" });
+              res
+                .status(400)
+                .json({ error: "Echec de création utilisateur", err });
             }
           });
         }
@@ -83,7 +94,7 @@ exports.login = (req, res) => {
   const emailEncrypted = cryptoJs
     .HmacSHA256(req.body.email, `${process.env.SECRET_KEY}`)
     .toString();
-  let insertQuery = `SELECT iduser, username, email, password, isAdmin, avatar FROM users WHERE email='${emailEncrypted}'`;
+  let insertQuery = `SELECT * FROM users WHERE email='${emailEncrypted}'`;
   client.query(insertQuery, (err, results) => {
     if (err) {
       res.status(400).json({ message: "Connexion echouée !" });
@@ -93,7 +104,7 @@ exports.login = (req, res) => {
         if (!valid) {
           return res.status(400).json({ error: "Mot de passe incorrect !" });
         } else {
-          console.log("connecté");
+          console.log("connecté", results);
           res.status(200).json({
             message: "Connecté !",
             userId: user.iduser,

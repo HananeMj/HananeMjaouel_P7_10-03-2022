@@ -19,6 +19,7 @@ h1 {
   margin: 40px 0 0;
   text-align: center;
   margin-top: 50px;
+  font-weight: bold;
 }
 
 ul {

@@ -3,17 +3,24 @@
     <div class="row">
       <div class="col-md-8">
         <div class="post-content">
-          <div v-if="post.picture">
-            <img
-              :src="post.picture"
-              alt="post-image"
-              class="img-responsive post-image"
-            />
-          </div>
           <div class="post-container">
-            <div>
+            <div v-if="post.picture">
+              <img
+                :src="post.picture"
+                alt="post-image"
+                class="img-responsive post-image"
+              />
+            </div>
+            <div v-if="post.avatar">
               <img
                 :src="post.avatar"
+                alt="user"
+                class="profile-photo-md pull-left"
+              />
+            </div>
+            <div v-else>
+              <img
+                src="https://bootdey.com/img/Content/avatar/avatar7.png"
                 alt="user"
                 class="profile-photo-md pull-left"
               />
@@ -28,58 +35,122 @@
                 <p class="text-muted">{{ post.createdat }}</p>
               </div>
               <div class="reaction">
-                <a @click="likePost(post.idpost)" class="btn text-green"
-                  ><i class="fa fa-thumbs-up"></i>{{ likes }} 13</a
-                >
+                <a @click="likePost(post.idpost)" class="btn text-green">
+                  <Icon
+                    icon="ant-design:like-filled"
+                    style="color: green"
+                    height="25"
+                  />{{ likes }} j'aime
+                </a>
                 <a
                   @click="deletePost()"
-                  v-if="post.userid == this.user.iduser || this.user.isadmin"
+                  v-if="post.userid == this.userId"
                   class="btn text-red"
-                  ><i class="fa-solid fa-trash-can"></i
-                ></a>
+                >
+                  <Icon
+                    icon="fluent:delete-28-filled"
+                    style="color: red"
+                    height="20"
+                  />
+                </a>
               </div>
               <div class="line-divider"></div>
               <div class="post-text">
                 <p>
-                  {{ post.content }} <i class="em em-anguished"></i>
-                  <i class="em em-anguished"></i>
-                  <i class="em em-anguished"></i>
+                  {{ post.content }}
                 </p>
               </div>
               <div class="line-divider"></div>
-              <button @click="getComments()" class="btn com__btn">
-                Commentaires
-              </button>
+              <a @click="getComments()" class="btn">
+                <Icon
+                  icon="ant-design:comment-outlined"
+                  color="grey"
+                  height="35"
+                />
+              </a>
               <div
                 v-for="comment in comments"
                 :key="comment.idcomment"
-                class="post-comment"
+                class="be-comment-content"
               >
+                <div v-if="!show">
+                  <img
+                    v-if="comment.avatar"
+                    :src="comment.avatar"
+                    alt="avatar commentaire"
+                    class="profile-photo-sm"
+                  />
+                  <img
+                    v-else
+                    src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                    alt="avatar commentaire"
+                    class="profile-photo-sm"
+                  />
+                  <span class="be-comment-name">
+                    <a href="blog-detail-2.html">{{ comment.username }}</a>
+                  </span>
+                  <span class="be-comment-time">
+                    <i class="fa fa-clock-o"></i>
+                    {{ comment.createdat }}
+                  </span>
+                  <p class="be-comment-text">
+                    {{ comment.content }}
+                  </p>
+                  <a
+                    v-if="comment.userid == this.userId"
+                    type="button"
+                    class="btn"
+                    @click="deleteComment(comment.idcomment)"
+                  >
+                    <Icon
+                      icon="fluent:delete-28-filled"
+                      style="color: red"
+                      height="20"
+                    />
+                  </a>
+                </div>
+              </div>
+
+              <!--<div
+                v-for="comment in comments"
+                :key="comment.idcomment"
+                class="post-comment"
+               >
                 <img
                   src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                  alt=""
+                  alt="avatar commentaire"
                   class="profile-photo-sm"
                 />
                 <p>
                   <router-link to="/profil" class="profile-link">{{
-                    user.username
-                  }}</router-link
-                  ><i class="em em-laughing"></i> {{ comment.content }}
+                    comment.username
+                  }}</router-link>
                 </p>
-                <button
-                  @click="deleteCom(comment.idcomment)"
-                  v-if="comment.userid == this.user.iduser || this.user.isadmin"
-                >
-                  Supprimer
-                </button>
-              </div>
+
+                <p class="text-muted">{{ comment.createdat }}</p>
+                <div>
+                  <i class="em em-laughing"></i> {{ comment.content }}
+
+                  <button
+                    type="button"
+                    class="btn btn-outline-light"
+                    @click="deleteCom(comment.idcomment)"
+                  >
+                    <Icon
+                      icon="fluent:delete-28-filled"
+                      style="color: red"
+                      height="20"
+                    />
+                  </button>
+                </div>
+              </div>-->
 
               <div class="post-comment">
-                <img
+                <!--<img
                   src="https://bootdey.com/img/Content/avatar/avatar1.png"
                   alt=""
                   class="profile-photo-sm"
-                />
+                />-->
                 <form @click.prevent="addComment(post.idpost)" method="post">
                   <input
                     v-model="commentInput"
@@ -87,9 +158,15 @@
                     id="content"
                     name="commentInput"
                     class="form-control"
-                    placeholder="publier un commentaire"
+                    placeholder="commenter"
                   />
-                  <button class="button">Commenter</button>
+                  <a type="button" class="btn">
+                    <Icon
+                      icon="akar-icons:comment-add"
+                      style="color: grey"
+                      height="30"
+                    />
+                  </a>
                 </form>
               </div>
             </div>
@@ -101,21 +178,28 @@
 </template>
 
 <script>
+import { Icon } from "@iconify/vue";
 import axios from "axios";
+//import moment from "moment";
 export default {
   name: "SocialPost",
+  components: {
+    Icon,
+  },
   props: ["post"],
 
   data() {
     return {
       posts: [],
       commentInput: "",
-      idpost: null,
+      idpost: "",
       idcomment: null,
       content: "",
       user: {},
       comments: [],
       likes: 0,
+      show: false,
+      userId: localStorage.getItem("userId"),
     };
   },
   methods: {
@@ -123,7 +207,7 @@ export default {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + localStorage.getItem("token");
       axios
-        .delete(`http://localhost:5000/api/post/${this.idpost}`)
+        .delete(`http://localhost:5000/api/post/${this.post.idpost}`)
 
         .then((response) => {
           console.log(response);
@@ -139,7 +223,7 @@ export default {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + localStorage.getItem("token");
       axios
-        .post(`http://localhost:5000/api/like/${this.idpost}`)
+        .post(`http://localhost:5000/api/post/${this.post.idpost}/like/`, {})
         .then((response) => {
           console.log(response);
           this.likes = response.data.result[0].likes;
@@ -166,10 +250,13 @@ export default {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + localStorage.getItem("token");
       axios
-        .post(`http://localhost:5000/api/post/${this.idPost}/comment`)
+        .post(`http://localhost:5000/api/post/${this.post.idpost}/comment`, {
+          content: this.commentInput,
+        })
         .then((response) => {
           console.log(response);
-          this.comments = response.data.comment;
+          this.show = false;
+          this.commentInput = "";
         })
         .catch((err) => {
           console.log(err);
@@ -202,13 +289,14 @@ body {
   ==================================================*/
 
 .post-content {
-  background: #f8f8f8;
-  border-radius: 4px;
+  background: #f96b6b29;
+  border-radius: 10px;
   width: 100%;
   border: 1px solid #f1f2f2;
   margin-bottom: 20px;
   overflow: hidden;
   position: relative;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
 }
 
 .post-content img.post-image,
@@ -264,6 +352,7 @@ img.profile-photo-md {
   height: 50px;
   width: 50px;
   border-radius: 50%;
+  margin-top: 20px;
 }
 
 img.profile-photo-sm {
@@ -275,14 +364,13 @@ img.profile-photo-sm {
 .text-green {
   color: #8dc63f;
 }
-
-.text-red {
-  color: #ef4136;
+.profile-link {
+  font-weight: bold;
 }
-
-.following {
-  color: #8dc63f;
-  font-size: 12px;
-  margin-left: 20px;
+form {
+  display: flex;
+}
+p {
+  color: black;
 }
 </style>

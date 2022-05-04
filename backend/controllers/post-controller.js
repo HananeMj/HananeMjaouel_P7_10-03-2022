@@ -82,10 +82,10 @@ exports.deletePost = (req, res) => {
   const post = {
     content: req.body.content,
     picture: req.body.picture,
-    userId: userId,
+    userid: userId,
     createdAt: date.toISOString(),
   };
-  if (post && post.userId == userId) {
+  if (post && post.userid == userId) {
     let insertQuery = `delete from posts where idpost=${req.params.idpost}`;
     client.query(insertQuery, (err, results) => {
       if (!err) {

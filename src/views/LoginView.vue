@@ -2,12 +2,19 @@
   <div class="container bootstrap snippets bootdey">
     <div class="row">
       <div class="col-sm-6 col-md-4 col-md-offset-4">
-        <h1 class="text-center login-title">Connexion</h1>
+        <h1 class="text-center login-title">Connexion/Inscription</h1>
         <div class="account-wall">
           <img
+            v-if="user.avatar"
+            class="profile-img"
+            :src="user.avatar"
+            alt="avatar"
+          />
+          <img
+            v-else
             class="profile-img"
             src="https://bootdey.com/img/Content/avatar/avatar7.png"
-            alt=""
+            alt="avatar"
           />
           <form @submit.prevent="handleSubmit()" class="form-signin">
             <input
@@ -34,6 +41,7 @@
             ><span class="clearfix"></span>-->
           </form>
         </div>
+        <p class="To-signup">Vous n'avez pas de compte ?</p>
         <router-link to="/register" class="text-center new-account"
           >Créer un compte
         </router-link>
@@ -49,35 +57,38 @@ export default {
 
   data() {
     return {
+      user: {},
       email: "",
       password: "",
+      avatar: "",
     };
   },
   methods: {
     handleSubmit() {
-      if (this.email == "" || this.password == "") {
+      /*if (this.email == "" || this.password == "") {
         alert("Veuillez entrer vos identifiants !");
-      } else {
-        axios
-          .post("http://localhost:5000/api/user/login", {
-            email: this.email,
-            password: this.password,
-          })
-          .then((response) => {
-            let resToken = response.data.token;
-            let resUser = response.data.userId;
-            localStorage.setItem("token", resToken);
-            localStorage.setItem("user", JSON.stringify(resUser));
-            this.$router.push("/feed");
-            //this.email: "",
-            //this.password:"",
-          })
+      } else {*/
+      axios
+        .post("http://localhost:5000/api/user/login", {
+          email: this.email,
+          password: this.password,
+          avatar: this.avatar,
+        })
+        .then((response) => {
+          let resToken = response.data.token;
+          let resUser = response.data.userId;
+          localStorage.setItem("token", resToken);
+          localStorage.setItem("userId", JSON.stringify(resUser));
+          this.$router.push("/feed");
+          //this.email: "",
+          //this.password:"",
+        })
 
-          .catch((err) => {
-            alert("Echec de connexion");
-            console.log(err);
-          });
-      }
+        .catch((err) => {
+          alert("Echec de connexion");
+          console.log(err);
+        });
+      //}
     },
   },
 };
@@ -157,5 +168,9 @@ body {
 }
 .row {
   justify-content: center;
+}
+.To-signup {
+  margin: 10px auto;
+  text-align: center;
 }
 </style>
