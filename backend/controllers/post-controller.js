@@ -102,11 +102,12 @@ exports.modifyPost = (req, res) => {
   const token = req.headers.authorization.split(" ")[1];
   const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
   const userId = decodedToken.userId;
+  const date = new Date();
   const post = {
     content: req.body.content,
     picture: "",
     userId: userId,
-    //createdAt: date.toISOString(),
+    createdAt: date.toISOString(),
   };
   if (post.userId == userId) {
     let updateQuery = `UPDATE posts SET content = '${post.content}', picture= '${post.picture}' WHERE idpost =${req.params.idpost} `;

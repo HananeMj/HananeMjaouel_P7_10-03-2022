@@ -57,6 +57,9 @@ export default {
 </script>
 
 <style scoped>
+.row {
+  justify-content: center;
+}
 body {
   margin-top: 20px;
   background: #eee;

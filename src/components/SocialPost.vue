@@ -40,18 +40,7 @@
                     icon="ant-design:like-filled"
                     style="color: green"
                     height="25"
-                  />{{ likes }} j'aime
-                </a>
-                <a
-                  @click="deletePost()"
-                  v-if="post.userid == this.userId"
-                  class="btn text-red"
-                >
-                  <Icon
-                    icon="fluent:delete-28-filled"
-                    style="color: red"
-                    height="20"
-                  />
+                  />{{ likes }}
                 </a>
               </div>
               <div class="line-divider"></div>
@@ -59,6 +48,32 @@
                 <p>
                   {{ post.content }}
                 </p>
+                <div class="editPost">
+                  <a
+                    @click="deletePost()"
+                    v-if="post.userid == this.userId"
+                    class="btn text-red"
+                  >
+                    <Icon
+                      icon="fluent:delete-28-filled"
+                      style="color: red"
+                      height="20"
+                    />
+                    Supp
+                  </a>
+                  <button
+                    @click="modifyPost()"
+                    v-if="post.userid == this.userId"
+                    class="btn"
+                  >
+                    <Icon
+                      icon="bx:message-alt-edit"
+                      style="color: blue"
+                      height="20"
+                    />
+                    Mod
+                  </button>
+                </div>
               </div>
               <div class="line-divider"></div>
               <a @click="getComments()" class="btn">
@@ -67,6 +82,7 @@
                   color="grey"
                   height="35"
                 />
+                Commentaires
               </a>
               <div
                 v-for="comment in comments"
@@ -107,43 +123,10 @@
                       style="color: red"
                       height="20"
                     />
+                    Supp
                   </a>
                 </div>
               </div>
-
-              <!--<div
-                v-for="comment in comments"
-                :key="comment.idcomment"
-                class="post-comment"
-               >
-                <img
-                  src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                  alt="avatar commentaire"
-                  class="profile-photo-sm"
-                />
-                <p>
-                  <router-link to="/profil" class="profile-link">{{
-                    comment.username
-                  }}</router-link>
-                </p>
-
-                <p class="text-muted">{{ comment.createdat }}</p>
-                <div>
-                  <i class="em em-laughing"></i> {{ comment.content }}
-
-                  <button
-                    type="button"
-                    class="btn btn-outline-light"
-                    @click="deleteCom(comment.idcomment)"
-                  >
-                    <Icon
-                      icon="fluent:delete-28-filled"
-                      style="color: red"
-                      height="20"
-                    />
-                  </button>
-                </div>
-              </div>-->
 
               <div class="post-comment">
                 <!--<img
@@ -200,9 +183,34 @@ export default {
       likes: 0,
       show: false,
       userId: localStorage.getItem("userId"),
+      createdat: "",
+      upload: false,
     };
   },
   methods: {
+    modifyPost() {
+      const fd = new FormData();
+      if (this.picture == null) {
+        fd.append("content", this.content);
+        fd.append("createdat", this.createdat);
+      } else {
+        fd.append("content", this.content);
+        fd.append("picture", this.picture, this.picture.name);
+        fd.append("createdat", this.createdat);
+      }
+      axios.defaults.headers.common["Authorization"] =
+        "Bearer " + localStorage.getItem("token");
+      axios
+        .put(`http://localhost:5000/api/post/${this.post.idpost}`, fd)
+        .then((response) => {
+          console.log(response);
+          //document.location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
     deletePost() {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + localStorage.getItem("token");
@@ -226,7 +234,7 @@ export default {
         .post(`http://localhost:5000/api/post/${this.post.idpost}/like/`, {})
         .then((response) => {
           console.log(response);
-          this.likes = response.data.result[0].likes;
+          this.likes = response.data.rows[0].likes;
         })
         .catch((error) => console.log(error));
     },
@@ -275,6 +283,9 @@ export default {
           console.log(err);
         });
     },
+  },
+  mounted() {
+    this.likes = this.post.likes;
   },
 };
 </script>
@@ -372,5 +383,8 @@ form {
 }
 p {
   color: black;
+}
+.row {
+  justify-content: center;
 }
 </style>

@@ -1,19 +1,5 @@
 <template>
-  <!-- <header>
-    <nav class="navbar navbar-expand">
-      <div class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link" @click="disconnectUser">Se deconnecter</a>
-        </li>
-        <li class="nav-item">
-          <router-link to="/postlist" class="nav-link"
-            >Fil d'actualités</router-link
-          >
-        </li>
-      </div>
-    </nav>
-  </header>-->
-  <form @submit.prevent="createPost" class="submit-form">
+  <form @submit.prevent="createPost()" class="submit-form">
     <div class="form-group">
       <label for="content">Quoi de neuf ?</label>
       <input
@@ -26,7 +12,7 @@
         name="content"
       />
     </div>
-    <div class="form-group">
+    <div class="form group">
       <label for="picture">Publier une photo</label>
       <input
         class="form-control-label upload-File"
@@ -37,25 +23,27 @@
         name="picture"
       />
     </div>
-    <button class="btn btn-success">Publier</button>
-
-    <div class="alert alert--success" v-show="!isValid">Publié !</div>
+    <div class="upload_photo">
+      <button class="glow-on-hover">Publier</button>
+    </div>
+    <!-- <div class="alert alert--success" v-show="isSuccess">Publié !</div>-->
   </form>
 </template>
 
 <script>
 import axios from "axios";
+
 export default {
   name: "PostInput",
   emits: ["newPost"],
-
+  components: {},
   data() {
     return {
       userId: localStorage.getItem("userId"),
       user: {},
       content: "",
       picture: "",
-      isValid: "false",
+      upload: false,
     };
   },
   methods: {
@@ -97,5 +85,82 @@ export default {
 }
 .custom-file-input :hover {
   cursor: pointer;
+}
+.glow-on-hover {
+  width: 120px;
+  height: 50px;
+  border: none;
+  outline: none;
+  color: #fff;
+  background: #111;
+  cursor: pointer;
+  position: relative;
+  z-index: 0;
+  border-radius: 10px;
+  margin: 20px auto;
+}
+
+.glow-on-hover:before {
+  content: "";
+  background: linear-gradient(
+    45deg,
+    #ff0000,
+    #ff7300,
+    #fffb00,
+    #48ff00,
+    #00ffd5,
+    #002bff,
+    #7a00ff,
+    #ff00c8,
+    #ff0000
+  );
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  background-size: 400%;
+  z-index: -1;
+  filter: blur(5px);
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  animation: glowing 20s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  border-radius: 10px;
+}
+
+.glow-on-hover:active {
+  color: #000;
+}
+
+.glow-on-hover:active:after {
+  background: transparent;
+}
+
+.glow-on-hover:hover:before {
+  opacity: 1;
+}
+
+.glow-on-hover:after {
+  z-index: -1;
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #111;
+  left: 0;
+  top: 0;
+  border-radius: 10px;
+}
+
+@keyframes glowing {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 400% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
 }
 </style>

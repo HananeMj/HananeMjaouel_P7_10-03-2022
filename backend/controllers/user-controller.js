@@ -19,33 +19,17 @@ exports.getOneUser = (req, res) => {
   const token = req.headers.authorization.split(" ")[1];
   const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
   const userId = decodedToken.userId;
-  const user = {
-    iduser: req.params.iduser,
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-    isAdmin: req.body.isadmin,
-    avatar: req.body.avatar,
-  };
-  if (user && user.iduser == userId) {
-    client.query(
-      `Select * from users where iduser=${user.iduser}`,
-      (err, result) => {
-        if (!err) {
-          res.send(result.rows);
-        } else {
-          res
-            .status(400)
-            .json({ message: " Erreur de récupération de l'utilisateur !" });
-        }
-      }
-    );
-  } else {
-    res.status(400).json({
-      message:
-        "Vous n'avez pas les droits pour acceder aux données de cet utilisateur",
-    });
-  }
+
+  let selectQuery = `SELECT * FROM users WHERE iduser='${userId}`;
+  client.query(selectQuery, (err, result) => {
+    if (!err) {
+      res.status(200).json({ message: "Utilisateur récupéré" + result });
+    } else {
+      res
+        .status(400)
+        .json({ message: " Erreur de récupération de l'utilisateur !" });
+    }
+  });
 };
 
 exports.signup = (req, res) => {

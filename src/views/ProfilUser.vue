@@ -1,5 +1,6 @@
 <template>
   <div v-if="user" class="container bootdey">
+    <h3>Profil</h3>
     <hr />
     <div class="wrap clearfix">
       <!--Avatar -->
@@ -42,7 +43,7 @@
         </button>
       </div>
       <!-- End Avatar -->
-      <div class="col-sm-8 col-xs-12">
+      <!--<div class="col-sm-8 col-xs-12">
         <div class="icons col-xs-12">
           <button class="btn btn-default">
             <span class="glyphicon glyphicon-user"></span>
@@ -63,7 +64,7 @@
             quae
           </p>
         </div>
-      </div>
+      </div>-->
     </div>
   </div>
 </template>
@@ -78,6 +79,7 @@ export default {
   props: ["iduser"],
   data() {
     return {
+      user: {},
       avatar: "",
       username: "",
       isadmin: "",
@@ -86,7 +88,7 @@ export default {
   },
 
   methods: {
-    deleteAccount() {
+    deleteUser() {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + localStorage.getItem("token");
       axios
@@ -121,14 +123,14 @@ export default {
     },
   },
 
-  created() {
+  mounted() {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("token");
     axios
-      .get(`http://localhost:5000/api/user/currentUser/${this.iduser}`)
+      .get(`http://localhost:5000/api/user/currentUser/${this.user.iduser}`)
 
       .then((response) => {
-        this.user = response.data;
+        //this.user = response.data;
         console.log(response.data);
       })
       .catch((err) => {
@@ -139,6 +141,11 @@ export default {
 </script>
 
 <style scoped>
+h3 {
+  text-align: center;
+  font-weight: bold;
+  margin: 15px auto;
+}
 .btn:not(:disabled):not(.disabled) {
   margin: 15px;
 }
