@@ -7,9 +7,7 @@
 export default {
   components: {},
   data() {
-    return {
-      user: null,
-    };
+    return {};
   },
   methods: {},
 };

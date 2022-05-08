@@ -145,29 +145,21 @@ exports.deleteUser = (req, res) => {
   }
 };
 
-/*exports.updateUser = (req, res) => {
+exports.updateUser = (req, res) => {
   const token = req.headers.authorization.split(" ")[1];
   const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
   const userId = decodedToken.userId;
   const user = {
-    id: req.params.id,
+    iduser: userId,
     username: req.body.username,
     email: cryptoJs
       .HmacSHA256(req.body.email, `${process.env.SECRET_KEY}`)
       .toString(),
-    password: req.body.password,
-    isAdmin: req.body.isadmin,
-    avatar: req.body.avatar,
   };
-  if (user && user.id == userId) {
+  if (user && user.iduser == userId) {
     let updateQuery = `UPDATE users
                        SET username = '${user.username}',
-                       email = '${user.email}',
-                       password = '${user.password}',
-                       isadmin = '${user.isAdmin}',
-                       avatar = '${user.avatar}
-      
-                       WHERE id = ${user.id}`;
+                       email = '${user.email}' WHERE iduser = '${userId}'`;
 
     client.query(updateQuery, (err, results) => {
       if (!err) {
@@ -183,7 +175,7 @@ exports.deleteUser = (req, res) => {
         "Vous n'avez pas les droits pour modifier les données de cet utilisateur !",
     });
   }
-};*/
+};
 
 exports.uploadAvatar = (req, res) => {
   const token = req.headers.authorization.split(" ")[1];

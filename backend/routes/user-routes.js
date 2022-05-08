@@ -14,6 +14,7 @@ router.get("/currentUser/:iduser", auth, userController.getOneUser);
 router.get("/", auth, userController.getAllusers);
 router.delete("/:iduser", auth, userController.deleteUser);
 router.put("/profil/:iduser", auth, multer, userController.uploadAvatar);
+//router.put("/profil/:iduser", auth, userController.updateUser);
 
 //export du routeur
 module.exports = router;

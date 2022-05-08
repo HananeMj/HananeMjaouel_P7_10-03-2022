@@ -49,10 +49,7 @@
           <p class="user_info"></p>
         </div>
         <div class="span2">
-          <div
-            v-if="user.isadmin == true || user.iduser == this.userId"
-            class="btn-group"
-          >
+          <div v-if="user.iduser == this.userId" class="btn-group">
             <a
               class="btn dropdown-toggle btn-info"
               data-toggle="dropdown"

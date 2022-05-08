@@ -80,6 +80,7 @@ export default {
         .delete(`http://localhost:5000/api/user/${this.userId}`)
         .then((response) => {
           console.log(response);
+          alert("Compte utilisateur supprimé");
           this.$router.push("/");
           localStorage.clear();
         })

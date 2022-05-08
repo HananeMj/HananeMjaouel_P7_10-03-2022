@@ -23,7 +23,7 @@
                 <Icon icon="bi:three-dots" color="red" height="30" />
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                <button
+                <!--<button
                   data-toggle="modal"
                   data-target="#myModal"
                   @click="modifyPost(post.id)"
@@ -32,7 +32,7 @@
                   type="button"
                 >
                   Modifier
-                </button>
+                </button>-->
                 <button
                   @click="deletePost()"
                   v-if="post.userid == this.userId"
@@ -127,11 +127,12 @@
             </div>
             <div class="post-detail">
               <div class="user-info">
-                <h5>
-                  <router-link to="/profil" class="profile-link">{{
-                    post.username
-                  }}</router-link>
+                <h5 v-if="post.userid == this.userId">
+                  <router-link to="/profil" class="">
+                    {{ post.username }}</router-link
+                  >
                 </h5>
+                <h5 v-else>{{ post.username }}</h5>
                 <p class="text-muted">{{ post.createdat }}</p>
               </div>
 
@@ -243,6 +244,7 @@ import axios from "axios";
 //import moment from "moment";
 export default {
   name: "SocialPost",
+
   components: {
     Icon,
   },
@@ -275,7 +277,7 @@ export default {
       console.log("content:" + this.content);
 
       fd.append("content", this.content);
-      fd.append("image", image.file);
+      fd.append("image", this.image.file);
 
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + localStorage.getItem("token");
@@ -283,6 +285,8 @@ export default {
         .put(`http://localhost:5000/api/post/${this.post.idpost}`, fd, config)
         .then((response) => {
           console.log(response.data + "publication modifiée");
+          this.$emit("newPost", response.data.post);
+          //document.location.reload();
         })
         .catch((err) => {
           console.log(err);
@@ -362,15 +366,16 @@ export default {
         });
     },
   },
-  mounted() {
-    this.likes = this.post.likes;
-  },
 };
 </script>
 
 <style scoped>
 body {
   margin-top: 20px;
+}
+h5 {
+  color: rgb(0, 102, 255);
+  font-weight: bold;
 }
 
 /*==================================================
