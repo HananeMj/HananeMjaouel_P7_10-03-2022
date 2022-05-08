@@ -11,6 +11,106 @@
                 class="img-responsive post-image"
               />
             </div>
+            <div v-if="post.userid == this.userId" class="dropdown">
+              <button
+                class="btn btn-secondary"
+                type="button"
+                id="dropdownMenu2"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <Icon icon="bi:three-dots" color="red" height="30" />
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <button
+                  data-toggle="modal"
+                  data-target="#myModal"
+                  @click="modifyPost(post.id)"
+                  v-if="post.userid == this.userId"
+                  class="dropdown-item"
+                  type="button"
+                >
+                  Modifier
+                </button>
+                <button
+                  @click="deletePost()"
+                  v-if="post.userid == this.userId"
+                  class="dropdown-item"
+                  type="button"
+                >
+                  Supprimer
+                </button>
+              </div>
+
+              <!-- Modal -->
+              <form
+                @submit.prevent="modifyPost()"
+                id="uploadForm"
+                class="submit-form"
+              >
+                <div
+                  class="modal fade"
+                  id="myModal"
+                  tabindex="-1"
+                  role="dialog"
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                          Modifier ma publication
+                        </h5>
+                        <button
+                          type="button"
+                          class="close"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="form-group">
+                        <label for="content">Quoi de neuf ?</label>
+                        <input
+                          v-model="content"
+                          type="text"
+                          class="form-control"
+                          id="content"
+                          required
+                          name="content"
+                        />
+                      </div>
+                      <div class="form group">
+                        <label for="image">Ajouter une photo</label>
+                        <input
+                          class="form-control-label upload-File"
+                          ref="file"
+                          type="file"
+                          accept="image/*"
+                          id="image"
+                          name="image"
+                        />
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-dismiss="modal"
+                        >
+                          Fermer
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                          Sauvegarder
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
             <div v-if="post.avatar">
               <img
                 :src="post.avatar"
@@ -34,97 +134,74 @@
                 </h5>
                 <p class="text-muted">{{ post.createdat }}</p>
               </div>
+
               <div class="reaction">
                 <a @click="likePost(post.idpost)" class="btn text-green">
-                  <Icon
-                    icon="ant-design:like-filled"
-                    style="color: green"
-                    height="25"
-                  />{{ likes }}
+                  <Icon icon="subway:like" style="color: green" height="25" />{{
+                    likes
+                  }}
                 </a>
               </div>
-              <div class="line-divider"></div>
-              <div class="post-text">
-                <p>
-                  {{ post.content }}
-                </p>
-                <div class="editPost">
-                  <a
-                    @click="deletePost()"
-                    v-if="post.userid == this.userId"
-                    class="btn text-red"
-                  >
-                    <Icon
-                      icon="fluent:delete-28-filled"
-                      style="color: red"
-                      height="20"
-                    />
-                    Supp
-                  </a>
-                  <button
-                    @click="modifyPost()"
-                    v-if="post.userid == this.userId"
-                    class="btn"
-                  >
-                    <Icon
-                      icon="bx:message-alt-edit"
-                      style="color: blue"
-                      height="20"
-                    />
-                    Mod
-                  </button>
+              <div class="line-divider">
+                <div class="post-text">
+                  <p>
+                    {{ post.content }}
+                  </p>
                 </div>
               </div>
-              <div class="line-divider"></div>
-              <a @click="getComments()" class="btn">
-                <Icon
-                  icon="ant-design:comment-outlined"
-                  color="grey"
-                  height="35"
-                />
-                Commentaires
-              </a>
-              <div
-                v-for="comment in comments"
-                :key="comment.idcomment"
-                class="be-comment-content"
-              >
-                <div v-if="!show">
-                  <img
-                    v-if="comment.avatar"
-                    :src="comment.avatar"
-                    alt="avatar commentaire"
-                    class="profile-photo-sm"
+              <div class="line-divider">
+                <a @click="getComments()" class="btn">
+                  <Icon
+                    icon="ant-design:comment-outlined"
+                    color="grey"
+                    height="35"
                   />
-                  <img
-                    v-else
-                    src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                    alt="avatar commentaire"
-                    class="profile-photo-sm"
-                  />
-                  <span class="be-comment-name">
-                    <a href="blog-detail-2.html">{{ comment.username }}</a>
-                  </span>
-                  <span class="be-comment-time">
-                    <i class="fa fa-clock-o"></i>
-                    {{ comment.createdat }}
-                  </span>
-                  <p class="be-comment-text">
-                    {{ comment.content }}
-                  </p>
-                  <a
-                    v-if="comment.userid == this.userId"
-                    type="button"
-                    class="btn"
-                    @click="deleteComment(comment.idcomment)"
-                  >
-                    <Icon
-                      icon="fluent:delete-28-filled"
-                      style="color: red"
-                      height="20"
+                  Commentaires
+                </a>
+                <div
+                  v-for="comment in comments"
+                  :key="comment.idcomment"
+                  class="be-comment-content"
+                >
+                  <div v-if="!show">
+                    <img
+                      v-if="comment.avatar"
+                      :src="comment.avatar"
+                      alt="avatar commentaire"
+                      class="profile-photo-sm"
                     />
-                    Supp
-                  </a>
+                    <img
+                      v-else
+                      src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                      alt="avatar commentaire"
+                      class="profile-photo-sm"
+                    />
+                    <span class="be-comment-name">
+                      <a href="blog-detail-2.html">{{ comment.username }}</a>
+                    </span>
+                    <span class="be-comment-time">
+                      <i class="fa fa-clock-o"></i>
+                      {{ comment.createdat }}
+                    </span>
+                    <p class="be-comment-text">
+                      {{ comment.content }}
+                    </p>
+                    <a
+                      v-if="
+                        comment.userid == this.userId || this.isadmin == true
+                      "
+                      type="button"
+                      class="btn"
+                      @click="deleteComment(comment.idcomment)"
+                    >
+                      <Icon
+                        icon="fluent:delete-28-filled"
+                        style="color: red"
+                        height="20"
+                      />
+                      Supp
+                    </a>
+                  </div>
                 </div>
               </div>
 
@@ -185,26 +262,27 @@ export default {
       userId: localStorage.getItem("userId"),
       createdat: "",
       upload: false,
+      isadmin: "",
     };
   },
   methods: {
     modifyPost() {
-      const fd = new FormData();
-      if (this.picture == null) {
-        fd.append("content", this.content);
-        fd.append("createdat", this.createdat);
-      } else {
-        fd.append("content", this.content);
-        fd.append("picture", this.picture, this.picture.name);
-        fd.append("createdat", this.createdat);
-      }
+      const config = { headers: { "Content-Type": "multipart/form-data" } };
+      const fd = new FormData(document.getElementById("uploadForm"));
+      var image = document.querySelector("#image");
+
+      console.log("image.file" + image.file);
+      console.log("content:" + this.content);
+
+      fd.append("content", this.content);
+      fd.append("image", image.file);
+
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + localStorage.getItem("token");
       axios
-        .put(`http://localhost:5000/api/post/${this.post.idpost}`, fd)
+        .put(`http://localhost:5000/api/post/${this.post.idpost}`, fd, config)
         .then((response) => {
-          console.log(response);
-          //document.location.reload();
+          console.log(response.data + "publication modifiée");
         })
         .catch((err) => {
           console.log(err);
@@ -234,9 +312,9 @@ export default {
         .post(`http://localhost:5000/api/post/${this.post.idpost}/like/`, {})
         .then((response) => {
           console.log(response);
-          this.likes = response.data.rows[0].likes;
+          this.likes = response.data.message;
         })
-        .catch((error) => console.log(error));
+        .catch((err) => console.log(err));
     },
 
     getComments() {
@@ -386,5 +464,23 @@ p {
 }
 .row {
   justify-content: center;
+}
+.dropdown {
+  text-align: right;
+  margin-top: 15px;
+  margin-right: 30px;
+}
+.btn-secondary {
+  color: red;
+  background-color: transparent;
+  border-color: transparent;
+}
+label {
+  margin-right: 10px;
+}
+.form-group {
+  text-align: left;
+  margin-left: 10px;
+  width: 95%;
 }
 </style>

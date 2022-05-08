@@ -9,7 +9,7 @@ const MIME_TYPES = {
 };
 //indique dans quel dossier multer enregistrera les images
 const storage = multer.diskStorage({
-  destination: (req, file, callback) => {
+  destination: (file, req, callback) => {
     callback(null, "images");
   },
   filename: (req, file, callback) => {

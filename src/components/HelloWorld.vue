@@ -20,6 +20,7 @@ h1 {
   text-align: center;
   margin-top: 50px;
   font-weight: bold;
+  font-size: 4rem;
 }
 
 ul {

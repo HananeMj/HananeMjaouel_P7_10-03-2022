@@ -4,12 +4,8 @@
   <router-view />
 </template>
 <script>
-import GroupoHeader from "@/components/GroupoHeader.vue";
-
 export default {
-  components: {
-    GroupoHeader,
-  },
+  components: {},
   data() {
     return {
       user: null,

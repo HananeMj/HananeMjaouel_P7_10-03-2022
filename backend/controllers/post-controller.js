@@ -36,9 +36,6 @@ exports.createPost = (req, res) => {
       req.file.filename
     }`;
   }
-
-  //const dateStr = "2022-07-21T09:35:31.820Z";
-
   const date = new Date();
   console.log(date); // 👉 Thu Jul 21 2022 12:35:31 GMT+0300
 
@@ -51,6 +48,7 @@ exports.createPost = (req, res) => {
     userId: userId,
     createdAt: date.toISOString(),
   };
+
   if (post.content != "") {
     let insertQuery = `INSERT INTO posts (content, picture, userId, createdat) VALUES ('${post.content}', '${post.picture}', '${post.userId}', '${post.createdAt}')`;
     client.query(insertQuery, (err, results) => {
@@ -104,13 +102,14 @@ exports.modifyPost = (req, res) => {
   const userId = decodedToken.userId;
   const date = new Date();
   const post = {
+    idpost: req.params.idpost,
     content: req.body.content,
     picture: "",
     userId: userId,
     createdAt: date.toISOString(),
   };
   if (post.userId == userId) {
-    let updateQuery = `UPDATE posts SET content = '${post.content}', picture= '${post.picture}' WHERE idpost =${req.params.idpost} `;
+    let updateQuery = `UPDATE posts SET content = '${post.content}',  picture ='${post.picture}' WHERE idpost ='${post.idpost}'`;
     client.query(updateQuery, (err, results) => {
       if (!err) {
         console.log(results);
@@ -119,6 +118,9 @@ exports.modifyPost = (req, res) => {
         res.status(400).json({ error: err.message });
       }
     });
+  } else if (post.content == "") {
+    alert("Ajouter un contenu pour publier !");
+    res.status(500).json("Modification impossible avec un contenu vide");
   }
 };
 

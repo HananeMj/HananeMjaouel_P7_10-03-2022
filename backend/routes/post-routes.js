@@ -13,9 +13,7 @@ router.delete(
   /*adminAuth.authPost,*/ postControll.deletePost
 );
 router.put("/:idpost", auth, multer, postControll.modifyPost);
-//router.get("/", auth, postControll.getAllposts);
 router.get("/:idpost", auth, postControll.getOnePost);
 router.get("/", auth, postControll.listAllPosts);
-//router.get("/", auth, postControll.getAllPostCom);
 
 module.exports = router;

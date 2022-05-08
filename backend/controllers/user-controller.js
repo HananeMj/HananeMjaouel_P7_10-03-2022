@@ -19,17 +19,28 @@ exports.getOneUser = (req, res) => {
   const token = req.headers.authorization.split(" ")[1];
   const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
   const userId = decodedToken.userId;
-
-  let selectQuery = `SELECT * FROM users WHERE iduser='${userId}`;
-  client.query(selectQuery, (err, result) => {
-    if (!err) {
-      res.status(200).json({ message: "Utilisateur récupéré" + result });
-    } else {
-      res
-        .status(400)
-        .json({ message: " Erreur de récupération de l'utilisateur !" });
-    }
-  });
+  const user = {
+    iduser: userId,
+    username: req.body.username,
+    email: cryptoJs
+      .HmacSHA256(req.body.email, `${process.env.SECRET_KEY}`)
+      .toString(),
+    avatar: req.body.avatar,
+    isadmin: req.body.isadmin,
+  };
+  if (user && user.iduser == userId) {
+    let selectQuery = `SELECT * FROM users WHERE iduser='${userId}'`;
+    client.query(selectQuery, (err, result) => {
+      if (!err) {
+        res.send(result.rows);
+        console.log("Utilisateur récupéré");
+      } else {
+        res
+          .status(400)
+          .json({ message: " Erreur de récupération de l'utilisateur !" });
+      }
+    });
+  }
 };
 
 exports.signup = (req, res) => {

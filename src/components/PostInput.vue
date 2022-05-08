@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="createPost()" class="submit-form">
+  <form @submit.prevent="createPost()" id="uploadForm" class="submit-form">
     <div class="form-group">
       <label for="content">Quoi de neuf ?</label>
       <input
@@ -12,31 +12,42 @@
         name="content"
       />
     </div>
-    <div class="form group">
+
+    <div class="form-row push">
+      <a @click="upload = !upload" class="btn">
+        <Icon
+          icon="ic:outline-add-photo-alternate"
+          style="color: red"
+          height="40"
+        />
+      </a>
+    </div>
+
+    <div v-if="upload" class="form group">
       <label for="picture">Publier une photo</label>
       <input
         class="form-control-label upload-File"
+        ref="file"
         type="file"
-        ref="picture"
         accept="image/*"
-        id="picture"
-        name="picture"
+        id="image"
+        name="image"
       />
     </div>
     <div class="upload_photo">
       <button class="glow-on-hover">Publier</button>
     </div>
-    <!-- <div class="alert alert--success" v-show="isSuccess">Publié !</div>-->
   </form>
+  <!-- <div class="alert alert--success" v-show="isSuccess">Publié !</div>-->
 </template>
 
 <script>
 import axios from "axios";
-
+import { Icon } from "@iconify/vue";
 export default {
   name: "PostInput",
   emits: ["newPost"],
-  components: {},
+  components: { Icon },
   data() {
     return {
       userId: localStorage.getItem("userId"),
@@ -50,20 +61,22 @@ export default {
     savePost(content) {
       console.log(content);
     },
+
     createPost() {
-      console.log(this.content, this.picture);
-      const formData = new FormData();
-      formData.append("content", this.content);
-      formData.append("picture", this.picture);
-      console.log(formData);
+      const config = { headers: { "Content-Type": "multipart/form-data" } };
+      const data = new FormData(document.getElementById("uploadForm"));
+      var imageFile = document.querySelector("#image");
+      console.log(imageFile.file);
+      data.append("image", imageFile.file);
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + localStorage.getItem("token");
       axios
-        .post("http://localhost:5000/api/post", formData)
+        .post("http://localhost:5000/api/post", data, config)
 
         .then((response) => {
+          this.upload = false;
           this.$emit("newPost", response.data.post);
-          console.log("post crée !" + response);
+          console.log("post crée !" + response.data);
           document.location.reload();
         })
         .catch((error) => {
@@ -87,8 +100,8 @@ export default {
   cursor: pointer;
 }
 .glow-on-hover {
-  width: 120px;
-  height: 50px;
+  width: 100px;
+  height: 40px;
   border: none;
   outline: none;
   color: #fff;

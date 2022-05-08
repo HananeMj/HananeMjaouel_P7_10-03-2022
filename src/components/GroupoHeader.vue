@@ -16,32 +16,11 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item active">
-          <router-link to="/feed" class="nav-link"
-            >Fil d'actualités<span class="sr-only">(current)</span></router-link
-          >
-        </li>
         <li class="nav-item">
           <router-link to="/login" class="nav-link"
-            >Connexion
-            <Icon icon="oi:account-login" style="color: red" height="20"
+            >Connexion / Inscription
+            <Icon icon="uil:signin" style="color: red" height="30"
           /></router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="/profil" class="nav-link" href="#"
-            >Profil
-            <Icon
-              icon="carbon:user-avatar-filled"
-              style="color: red"
-              height="20"
-            />
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <a @click="logOutUser" class="nav-link"
-            >Déconnexion
-            <Icon icon="oi:account-logout" style="color: red" height="20"
-          /></a>
         </li>
       </ul>
     </div>
@@ -53,20 +32,20 @@ import { Icon } from "@iconify/vue";
 export default {
   name: "groupo-header",
   data() {
-    return {};
+    return {
+      isHidden: false,
+    };
   },
 
   components: { Icon },
-  methods: {
-    logOutUser() {
-      localStorage.clear();
-      this.$router.push("/");
-    },
-  },
+  methods: {},
 };
 </script>
 
-<style scoped>
+<style>
+.navbar-light .navbar-nav .nav-link {
+  cursor: pointer;
+}
 .navbar {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
 }

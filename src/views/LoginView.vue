@@ -65,9 +65,6 @@ export default {
   },
   methods: {
     handleSubmit() {
-      /*if (this.email == "" || this.password == "") {
-        alert("Veuillez entrer vos identifiants !");
-      } else {*/
       axios
         .post("http://localhost:5000/api/user/login", {
           email: this.email,
@@ -85,10 +82,9 @@ export default {
         })
 
         .catch((err) => {
-          alert("Echec de connexion");
+          alert("Identifiant(s) incorrect(s)");
           console.log(err);
         });
-      //}
     },
   },
 };

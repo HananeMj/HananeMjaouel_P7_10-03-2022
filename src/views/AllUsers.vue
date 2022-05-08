@@ -1,4 +1,24 @@
 <template>
+  <div class="navbar">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <router-link to="/feed" class="nav-link" href="#">
+          <Icon icon="akar-icons:arrow-back-thick-fill" height="30" /> Fil
+          d'actualités
+        </router-link>
+      </li>
+      <li class="nav-item">
+        <router-link to="/profil" class="nav-link" href="#">
+          <Icon
+            icon="carbon:user-avatar-filled"
+            style="color: black"
+            height="30"
+          />
+          Mon profil
+        </router-link>
+      </li>
+    </ul>
+  </div>
   <h3>Membres</h3>
   <br /><br />
   <div
@@ -29,20 +49,20 @@
           <p class="user_info"></p>
         </div>
         <div class="span2">
-          <div v-if="user.isadmin == true" class="btn-group">
+          <div
+            v-if="user.isadmin == true || user.iduser == this.userId"
+            class="btn-group"
+          >
             <a
               class="btn dropdown-toggle btn-info"
               data-toggle="dropdown"
               href="#"
             >
-              Action
+              Options
               <span class="icon-cog icon-white"></span
               ><span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li>
-                <a href="#">Modifier</a>
-              </li>
               <li>
                 <a href="#" @click="deleteUser(user)">Supprimer</a>
               </li>
@@ -55,15 +75,20 @@
 </template>
 
 <script>
+import { Icon } from "@iconify/vue";
 import axios from "axios";
 export default {
   name: "AllUser",
+  components: {
+    Icon,
+  },
   props: [],
   data() {
     return {
       user: {},
       users: [],
       isadmin: "",
+      userId: localStorage.getItem("userId"),
     };
   },
   methods: {
@@ -99,9 +124,11 @@ export default {
 
 <style scoped>
 h3 {
+  color: black;
   text-align: center;
   margin-top: 50px;
   font-weight: bold;
+  font-size: 2rem;
 }
 .user {
   max-width: 100%;
@@ -109,10 +136,17 @@ h3 {
   display: flex;
   justify-content: space-around;
   gap: 16px;
-  background: rgb(236, 235, 235);
+  background: #f96b6b29;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   border-radius: 20px;
   padding: 20px;
   margin: 20px auto;
+}
+.nav-link {
+  color: black;
+}
+span {
+  color: black;
+  margin-top: 15px;
 }
 </style>

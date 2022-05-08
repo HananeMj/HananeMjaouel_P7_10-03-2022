@@ -5,7 +5,7 @@
         <div class="d-table-cell align-middle">
           <div class="text-center mt-4">
             <h1 class="h2">Get started</h1>
-            <p class="lead">Crée un compte pour partager tes émotions</p>
+            <p class="lead">Créer un compte</p>
           </div>
 
           <div class="card">

@@ -28,8 +28,10 @@
             style="color: grey"
             height="40"
           />
+          Modifier ma photo de profil
         </button>
       </div>
+
       <div v-if="upload">
         <FileUpload @newAvatar="getNewAvatar" />
       </div>
@@ -41,30 +43,11 @@
         <button @click="deleteUser(user)" class="btn btn-outline-danger">
           Supprimer mon compte
         </button>
+        <router-link to="/feed"
+          ><Icon icon="akar-icons:arrow-back-thick-fill" />
+          Retour fil d'actualités
+        </router-link>
       </div>
-      <!-- End Avatar -->
-      <!--<div class="col-sm-8 col-xs-12">
-        <div class="icons col-xs-12">
-          <button class="btn btn-default">
-            <span class="glyphicon glyphicon-user"></span>
-          </button>
-
-          <button class="btn btn-default">
-            <span class="glyphicon glyphicon-refresh"></span>
-          </button>
-          <a @click="deleteAccount(user)" class="btn btn-default">
-            <span class="glyphicon glyphicon-trash"></span>
-          </a>
-        </div>
-        <div class="col-xs-12 content">
-          <h2>{{ user.isadmin }}</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos a
-            similique dicta modi minus nostrum magnam provident reprehenderit in
-            quae
-          </p>
-        </div>
-      </div>-->
     </div>
   </div>
 </template>
@@ -76,10 +59,12 @@ import axios from "axios";
 export default {
   name: "ProfilUser",
   components: { Icon, FileUpload },
-  props: ["iduser"],
+  props: [],
   data() {
     return {
+      userId: localStorage.getItem("userId"),
       user: {},
+      iduser: "",
       avatar: "",
       username: "",
       isadmin: "",
@@ -92,9 +77,7 @@ export default {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + localStorage.getItem("token");
       axios
-        .delete(
-          `http://localhost:5000/api/user/currentUser/${this.user.iduser}`
-        )
+        .delete(`http://localhost:5000/api/user/${this.userId}`)
         .then((response) => {
           console.log(response);
           this.$router.push("/");
@@ -127,10 +110,10 @@ export default {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("token");
     axios
-      .get(`http://localhost:5000/api/user/currentUser/${this.user.iduser}`)
+      .get(`http://localhost:5000/api/user/currentUser/${this.userId}`)
 
       .then((response) => {
-        //this.user = response.data;
+        this.user = response.data;
         console.log(response.data);
       })
       .catch((err) => {
@@ -162,5 +145,8 @@ h3 {
 }
 .upload_photo {
   margin: 20px auto;
+}
+a {
+  margin: 15px;
 }
 </style>
