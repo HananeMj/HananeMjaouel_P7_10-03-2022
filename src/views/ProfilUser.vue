@@ -100,6 +100,7 @@ export default {
         this
       );
       location.reload();
+      alert("Avatar modifié");
     },
     logOutUser() {
       localStorage.clear();

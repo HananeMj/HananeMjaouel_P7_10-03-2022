@@ -16,14 +16,14 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item active">
-          <router-link to="/members" class="nav-link"
-            >Membres<span class="sr-only">(current)</span></router-link
-          >
-        </li>
         <li class="nav-item">
+          <router-link to="/members" class="nav-link"
+            >Membres <Icon icon="fa:group" style="color: red" height="25"
+          /></router-link>
+        </li>
+        <li class="nav-item active">
           <router-link to="/profil" class="nav-link" href="#"
-            >Profil
+            >Profil <span class="sr-only">(current)</span>
             <Icon
               icon="carbon:user-avatar-filled"
               style="color: red"

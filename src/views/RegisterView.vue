@@ -1,4 +1,13 @@
 <template>
+  <div class="navbar">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <router-link to="/" class="nav-link" href="#">
+          <Icon icon="ant-design:home-outlined" height="30" />
+        </router-link>
+      </li>
+    </ul>
+  </div>
   <div class="container h-100">
     <div class="row h-100">
       <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
@@ -50,6 +59,12 @@
                   </div>
                 </form>
               </div>
+              <div class="link">
+                <p class="To-signup">Vous avez un compte ?</p>
+                <router-link to="/login" class="text-center new-account"
+                  >Connectez-vous
+                </router-link>
+              </div>
             </div>
           </div>
         </div>
@@ -59,9 +74,11 @@
 </template>
 
 <script>
+import { Icon } from "@iconify/vue";
 import axios from "axios";
 export default {
   name: "RegisterView",
+  components: { Icon },
   data() {
     return {
       username: "",
@@ -116,5 +133,8 @@ body {
   background-clip: border-box;
   border: 1px solid #e5e9f2;
   border-radius: 0.2rem;
+}
+.link {
+  text-align: center;
 }
 </style>

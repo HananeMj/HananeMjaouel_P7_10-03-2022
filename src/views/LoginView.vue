@@ -1,4 +1,13 @@
 <template>
+  <div class="navbar">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <router-link to="/" class="nav-link" href="#">
+          <Icon icon="ant-design:home-outlined" height="30" />
+        </router-link>
+      </li>
+    </ul>
+  </div>
   <div class="container bootstrap snippets bootdey">
     <div class="row">
       <div class="col-sm-6 col-md-4 col-md-offset-4">
@@ -33,12 +42,6 @@
               required
             />
             <button class="btn btn-lg btn-primary btn-block">Connexion</button>
-            <!--<label class="checkbox pull-left">
-              <input type="checkbox" value="remember-me" />
-              Remember me
-            </label>
-            <a href="#" class="pull-right need-help">Need help? </a
-            ><span class="clearfix"></span>-->
           </form>
         </div>
         <p class="To-signup">Vous n'avez pas de compte ?</p>
@@ -50,10 +53,11 @@
   </div>
 </template>
 <script>
+import { Icon } from "@iconify/vue";
 import axios from "axios";
 export default {
   name: "login-view",
-  components: {},
+  components: { Icon },
 
   data() {
     return {

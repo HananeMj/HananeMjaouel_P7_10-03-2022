@@ -223,7 +223,7 @@
                   />
                   <a type="button" class="btn">
                     <Icon
-                      icon="akar-icons:comment-add"
+                      icon="fluent:send-16-filled"
                       style="color: grey"
                       height="30"
                     />
@@ -241,7 +241,7 @@
 <script>
 import { Icon } from "@iconify/vue";
 import axios from "axios";
-//import moment from "moment";
+
 export default {
   name: "SocialPost",
 
