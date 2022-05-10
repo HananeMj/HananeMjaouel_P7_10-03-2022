@@ -18,7 +18,7 @@
       <ul class="navbar-nav">
         <li class="nav-item">
           <router-link to="/members" class="nav-link"
-            >Membres <Icon icon="fa:group" style="color: red" height="25"
+            >Membres <Icon icon="fa:group" style="color: #1e90ff" height="25"
           /></router-link>
         </li>
         <li class="nav-item active">
@@ -26,7 +26,7 @@
             >Profil <span class="sr-only">(current)</span>
             <Icon
               icon="carbon:user-avatar-filled"
-              style="color: red"
+              style="color: #1e90ff"
               height="30"
             />
           </router-link>
@@ -34,7 +34,7 @@
         <li class="nav-item">
           <a @click="logOutUser" class="nav-link"
             >Déconnexion
-            <Icon icon="heroicons-outline:logout" color="red" height="30"
+            <Icon icon="heroicons-outline:logout" color="#1E90FF" height="30"
           /></a>
         </li>
       </ul>
@@ -44,7 +44,7 @@
     <div class="input">
       <PostInput @newPost="getNewPost" />
     </div>
-    <h3>Fil d'actualités</h3>
+    <h1>Fil d'actualités</h1>
     <div v-for="post in posts" :key="post.idpost" class="wrapper">
       <SocialPost :post="post" />
     </div>
@@ -121,12 +121,12 @@ body {
   margin-top: 20px;
   background: #eee;
 }
-h3 {
+h1 {
   text-align: center;
   margin-top: 50px;
   margin-bottom: 50px;
   font-weight: bold;
-  color: black;
+  color: red;
 }
 .input {
   margin-top: 50px;

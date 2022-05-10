@@ -1,6 +1,5 @@
 require("dotenv").config();
 const { Client } = require("pg");
-//const Pool = require("pg").Pool;
 
 const client = new Client({
   host: "localhost",

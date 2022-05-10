@@ -3,7 +3,7 @@
     <ul class="navbar-nav">
       <li class="nav-item">
         <router-link to="/" class="nav-link" href="#">
-          <Icon icon="ant-design:home-outlined" height="30" />
+          <Icon icon="ant-design:home-outlined" height="30" /> Accueil
         </router-link>
       </li>
     </ul>
@@ -13,8 +13,7 @@
       <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
         <div class="d-table-cell align-middle">
           <div class="text-center mt-4">
-            <h1 class="h2">Get started</h1>
-            <p class="lead">Créer un compte</p>
+            <h1 class="h2">Créer un compte</h1>
           </div>
 
           <div class="card">
@@ -28,7 +27,8 @@
                       class="form-control form-control-lg"
                       type="text"
                       name="name"
-                      placeholder="Entrer votre nom d'utilisateur"
+                      placeholder="nom d'utilisateur :"
+                      aria-label="nom d'utilisateur"
                     />
                   </div>
 
@@ -39,7 +39,8 @@
                       class="form-control form-control-lg"
                       type="email"
                       name="email"
-                      placeholder="Entrez votre email"
+                      placeholder="e-mail :"
+                      aria-label="email"
                     />
                   </div>
                   <div class="form-group">
@@ -49,11 +50,12 @@
                       class="form-control form-control-lg"
                       type="password"
                       name="password"
-                      placeholder="Entrez votre mot de passe"
+                      placeholder="mot de passe :"
+                      aria-label="mot de passe"
                     />
                   </div>
                   <div class="text-center mt-3">
-                    <button type="submit" class="btn btn-lg btn-primary">
+                    <button type="submit" class="btn btn-lg btn-dark">
                       créer mon compte
                     </button>
                   </div>
@@ -136,5 +138,18 @@ body {
 }
 .link {
   text-align: center;
+}
+.nav-link {
+  color: black;
+}
+.text-center {
+  color: black;
+}
+.btn-lg {
+  background-color: red;
+  border: red;
+  font-weight: 600;
+  border-radius: 25px;
+  color: black;
 }
 </style>

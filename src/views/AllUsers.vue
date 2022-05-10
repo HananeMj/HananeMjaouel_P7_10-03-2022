@@ -19,7 +19,7 @@
       </li>
     </ul>
   </div>
-  <h3>Membres</h3>
+  <h1>Membres</h1>
   <br /><br />
   <div
     v-for="user in users"
@@ -51,7 +51,7 @@
         <div class="span2">
           <div v-if="user.iduser == this.userId" class="btn-group">
             <a
-              class="btn dropdown-toggle btn-info"
+              class="btn dropdown-toggle btn-btn danger"
               data-toggle="dropdown"
               href="#"
             >
@@ -120,7 +120,7 @@ export default {
 </script>
 
 <style scoped>
-h3 {
+h1 {
   color: black;
   text-align: center;
   margin-top: 50px;

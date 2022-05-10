@@ -21,6 +21,7 @@ h1 {
   margin-top: 50px;
   font-weight: bold;
   font-size: 4rem;
+  color: red;
 }
 
 ul {

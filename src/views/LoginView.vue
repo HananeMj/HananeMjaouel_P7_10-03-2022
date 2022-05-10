@@ -3,7 +3,7 @@
     <ul class="navbar-nav">
       <li class="nav-item">
         <router-link to="/" class="nav-link" href="#">
-          <Icon icon="ant-design:home-outlined" height="30" />
+          <Icon icon="ant-design:home-outlined" height="30" /> Accueil
         </router-link>
       </li>
     </ul>
@@ -33,6 +33,7 @@
               placeholder="Email :"
               required
               autofocus
+              aria-label="input email"
             />
             <input
               v-model="password"
@@ -40,8 +41,9 @@
               class="form-control"
               placeholder="Mot de passe :"
               required
+              aria-label="input mot de passe"
             />
-            <button class="btn btn-lg btn-primary btn-block">Connexion</button>
+            <button class="btn btn-lg btn-dark btn-block">Connexion</button>
           </form>
         </div>
         <p class="To-signup">Vous n'avez pas de compte ?</p>
@@ -172,5 +174,18 @@ body {
 .To-signup {
   margin: 10px auto;
   text-align: center;
+}
+.text-center {
+  color: black;
+}
+.nav-link {
+  color: black;
+}
+.btn-lg {
+  background-color: red;
+  border: red;
+  font-weight: 600;
+  border-radius: 25px;
+  color: black;
 }
 </style>

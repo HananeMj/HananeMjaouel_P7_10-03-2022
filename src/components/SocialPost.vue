@@ -7,7 +7,7 @@
             <div v-if="post.picture">
               <img
                 :src="post.picture"
-                alt="post-image"
+                alt=""
                 class="img-responsive post-image"
               />
             </div>
@@ -20,7 +20,8 @@
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                <Icon icon="bi:three-dots" color="red" height="30" />
+                options
+                <!--<Icon icon="bi:three-dots" color="red" height="30" />-->
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                 <!--<button
@@ -44,7 +45,7 @@
               </div>
 
               <!-- Modal -->
-              <form
+              <!--<form
                 @submit.prevent="modifyPost()"
                 id="uploadForm"
                 class="submit-form"
@@ -81,6 +82,7 @@
                           id="content"
                           required
                           name="content"
+                          aria-label="ajouter une publication"
                         />
                       </div>
                       <div class="form group">
@@ -92,6 +94,7 @@
                           accept="image/*"
                           id="image"
                           name="image"
+                          aria-label="ajouter une image"
                         />
                       </div>
                       <div class="modal-footer">
@@ -109,127 +112,115 @@
                     </div>
                   </div>
                 </div>
-              </form>
+              </form>-->
             </div>
+
             <div v-if="post.avatar">
               <img
                 :src="post.avatar"
-                alt="user"
+                alt=""
                 class="profile-photo-md pull-left"
               />
             </div>
             <div v-else>
               <img
                 src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                alt="user"
+                alt="Avatar"
                 class="profile-photo-md pull-left"
               />
             </div>
             <div class="post-detail">
               <div class="user-info">
-                <h5 v-if="post.userid == this.userId">
-                  <router-link to="/profil" class="">
-                    {{ post.username }}</router-link
-                  >
-                </h5>
-                <h5 v-else>{{ post.username }}</h5>
+                <span
+                  ><strong> {{ post.username }}</strong>
+                </span>
+
                 <p class="text-muted">{{ post.createdat }}</p>
               </div>
+            </div>
 
-              <div class="reaction">
-                <a @click="likePost(post.idpost)" class="btn text-green">
-                  <Icon icon="subway:like" style="color: green" height="25" />{{
-                    likes
-                  }}
-                </a>
+            <div class="line-divider">
+              <div class="post-text">
+                <p>
+                  {{ post.content }}
+                </p>
               </div>
-              <div class="line-divider">
-                <div class="post-text">
-                  <p>
-                    {{ post.content }}
+            </div>
+            <div class="reaction">
+              <a @click="likePost(post.idpost)" class="btn text-green">
+                <Icon icon="subway:like" style="color: green" height="25" />
+                {{ likes }}
+              </a>
+            </div>
+
+            <div class="line-divider">
+              <a @click="getComments()" class="btn">
+                <Icon
+                  icon="ant-design:comment-outlined"
+                  color="red"
+                  height="35"
+                />
+                Commentaires
+              </a>
+              <div
+                v-for="comment in comments"
+                :key="comment.idcomment"
+                class="be-comment-content"
+              >
+                <div v-if="!show">
+                  <img
+                    v-if="comment.avatar"
+                    :src="comment.avatar"
+                    alt="avatar commentaire"
+                    class="profile-photo-sm"
+                  />
+                  <img
+                    v-else
+                    src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                    alt="avatar commentaire"
+                    class="profile-photo-sm"
+                  />
+                  <span class="be-comment-name">
+                    <a href="blog-detail-2.html">{{ comment.username }}</a>
+                  </span>
+                  <span class="be-comment-time">
+                    <i class="fa fa-clock-o"></i>
+                    {{ comment.createdat }}
+                  </span>
+                  <p class="be-comment-text">
+                    {{ comment.content }}
                   </p>
+                  <button
+                    v-if="comment.userid == this.userId || this.isadmin == true"
+                    type="button"
+                    class="btn btn-danger"
+                    @click="deleteComment(comment.idcomment)"
+                  >
+                    <!--<Icon icon="fluent:delete-28-filled" height="15" />-->
+                    Supprimer
+                  </button>
                 </div>
               </div>
-              <div class="line-divider">
-                <a @click="getComments()" class="btn">
-                  <Icon
-                    icon="ant-design:comment-outlined"
-                    color="grey"
-                    height="35"
-                  />
-                  Commentaires
-                </a>
-                <div
-                  v-for="comment in comments"
-                  :key="comment.idcomment"
-                  class="be-comment-content"
-                >
-                  <div v-if="!show">
-                    <img
-                      v-if="comment.avatar"
-                      :src="comment.avatar"
-                      alt="avatar commentaire"
-                      class="profile-photo-sm"
-                    />
-                    <img
-                      v-else
-                      src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                      alt="avatar commentaire"
-                      class="profile-photo-sm"
-                    />
-                    <span class="be-comment-name">
-                      <a href="blog-detail-2.html">{{ comment.username }}</a>
-                    </span>
-                    <span class="be-comment-time">
-                      <i class="fa fa-clock-o"></i>
-                      {{ comment.createdat }}
-                    </span>
-                    <p class="be-comment-text">
-                      {{ comment.content }}
-                    </p>
-                    <a
-                      v-if="
-                        comment.userid == this.userId || this.isadmin == true
-                      "
-                      type="button"
-                      class="btn"
-                      @click="deleteComment(comment.idcomment)"
-                    >
-                      <Icon
-                        icon="fluent:delete-28-filled"
-                        style="color: red"
-                        height="20"
-                      />
-                      Supp
-                    </a>
-                  </div>
-                </div>
-              </div>
+            </div>
 
-              <div class="post-comment">
-                <!--<img
-                  src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                  alt=""
-                  class="profile-photo-sm"
-                />-->
-                <form @click.prevent="addComment(post.idpost)" method="post">
-                  <input
-                    v-model="commentInput"
-                    type="text"
-                    id="content"
-                    name="commentInput"
-                    class="form-control"
-                    placeholder="commenter"
+            <div class="post-comment">
+              <form @click.prevent="addComment(post.idpost)" method="post">
+                <input
+                  v-model="commentInput"
+                  type="text"
+                  name="commentInput"
+                  class="form-control"
+                  placeholder="commenter"
+                  aria-label="ajouter un commentaire"
+                />
+                <a type="button" class="btn">
+                  <Icon
+                    icon="fluent:send-16-filled"
+                    style="color: red"
+                    height="30"
                   />
-                  <a type="button" class="btn">
-                    <Icon
-                      icon="fluent:send-16-filled"
-                      style="color: grey"
-                      height="30"
-                    />
-                  </a>
-                </form>
-              </div>
+                </a>
+              </form>
             </div>
           </div>
         </div>
@@ -476,9 +467,11 @@ p {
   margin-right: 30px;
 }
 .btn-secondary {
-  color: red;
-  background-color: transparent;
+  color: black;
+  background-color: red;
   border-color: transparent;
+  border-radius: 20px;
+  font-weight: 600;
 }
 label {
   margin-right: 10px;
@@ -487,5 +480,18 @@ label {
   text-align: left;
   margin-left: 10px;
   width: 95%;
+}
+.btn-danger {
+  font-size: 12px;
+  color: black;
+  height: 30px;
+  margin-bottom: 20px;
+  width: 80px;
+  border-radius: 25px;
+  font-weight: 500;
+  background-color: red;
+}
+.user-info {
+  color: #12a4d9;
 }
 </style>

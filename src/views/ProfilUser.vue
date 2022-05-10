@@ -1,6 +1,6 @@
 <template>
   <div v-if="user" class="container bootdey">
-    <h3>Profil</h3>
+    <h1>Profil</h1>
     <hr />
     <div class="wrap clearfix">
       <!--Avatar -->
@@ -36,7 +36,7 @@
         <FileUpload @newAvatar="getNewAvatar" />
       </div>
       <div class="form-row">
-        <button @click="logOutUser()" class="btn btn-outline-primary">
+        <button @click="logOutUser()" class="btn btn-outline-danger">
           Déconnexion
         </button>
 
@@ -44,8 +44,7 @@
           Supprimer mon compte
         </button>
         <router-link to="/feed"
-          ><Icon icon="akar-icons:arrow-back-thick-fill" />
-          Retour fil d'actualités
+          ><button class="btn btn-dark">Retour fil d'actualités</button>
         </router-link>
       </div>
     </div>
@@ -126,10 +125,11 @@ export default {
 </script>
 
 <style scoped>
-h3 {
+h1 {
   text-align: center;
   font-weight: bold;
   margin: 15px auto;
+  color: red;
 }
 .btn:not(:disabled):not(.disabled) {
   margin: 15px;
@@ -150,5 +150,10 @@ h3 {
 }
 a {
   margin: 15px;
+}
+.btn-dark {
+  background-color: #12a4d9;
+  border: #12a4d9;
+  color: black;
 }
 </style>
